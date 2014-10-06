@@ -1,22 +1,25 @@
 <html>
 	<head>
-		<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
+		<!--<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>-->
 	</head>
 	<body>
+		<div id="list_m"></div>
 		<audio id="player" controls>
-			<source src="./mp3/M1.mp3" type="audio/mpeg">
-			<source src="./mp3/M10.mp3" type="audio/mpeg">
+			<!--<source src="./mp3/M1.mp3" type="audio/mpeg">
+			<source src="./mp3/M10.mp3" type="audio/mpeg">-->
 		Your browser does not support the audio element.
 		</audio>
 		<br>
 		<button onclick="play();">Play</button>
+		<button onclick="playFile(5);">Play</button>
 		<br>
 		<textarea id="debug" rows="20" cols="100"></textarea>
 		<script type="text/javascript">
 			// Constants
-			var dir = "./mp3";
+			var dir = "./mp3/";
 			var ext = ".mp3"
 			var player = document.getElementById('player');
+			var list_m = document.getElementById('list_m');
 			
 			// Variables
 			var playlist = new Array(5, 10, 103, 29);
@@ -42,7 +45,9 @@
 				if(file == id) {
 					player.play();
 				} else {
-					
+					playerClean();
+					playerAddFile(id);
+					player.play();
 				}
 			}
 			
@@ -51,12 +56,20 @@
 					alert("ERROR: Player element not found!");
 					return;
 				}
+				debug("playerClean()");
 				player.innerHTML = '';
 				player.load();
 			}
 			
-			function playerAddFile() {
-				
+			function playerAddFile(id) {
+				if(player == null) {
+					alert("ERROR: Player element not found!");
+					return;
+				}
+				file = dir+id+ext;
+				debug("playerAddFile("+id+"):"+file);
+				player.innerHTML = "<source src=\""+file+"\" type=\"audio/mpeg\">";
+				player.load();
 			}
 			
 			function play() {
@@ -81,6 +94,28 @@
 				}
 				player.play();
 			}
+
+			function init_m() {
+				var max = 176;
+				var cols = 16;
+
+				if(list_m == null) {
+					alert("ERROR: list_m not found!");
+					return;
+				}
+				
+				var html = '';
+				html += '<table border="1">'
+				for(i = 1; i <= max; i++) {
+					if((i-1) % cols == 0) html += '<tr>';
+					html += "<td><button onclick=\"playFile('M"+i+"')\">"+i+"</button></td>";
+					if(i % cols == 0) html += '</tr>';
+				}
+				html += '</table>'
+				list_m.innerHTML = html;
+			}
+
+			init_m();
 			
 			/*$(document).ready(function() {
 				
