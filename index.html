@@ -1,0 +1,90 @@
+<html>
+	<head>
+		<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
+	</head>
+	<body>
+		<audio id="player" controls>
+			<source src="./mp3/M1.mp3" type="audio/mpeg">
+			<source src="./mp3/M10.mp3" type="audio/mpeg">
+		Your browser does not support the audio element.
+		</audio>
+		<br>
+		<button onclick="play();">Play</button>
+		<br>
+		<textarea id="debug" rows="20" cols="100"></textarea>
+		<script type="text/javascript">
+			// Constants
+			var dir = "./mp3";
+			var ext = ".mp3"
+			var player = document.getElementById('player');
+			
+			// Variables
+			var playlist = new Array(5, 10, 103, 29);
+			var playing = -1; // index current playing song in playlist
+			var file = undefined; // name of current playing file
+			
+			// Functions
+			function debug(text) {
+				var debugging = document.getElementById('debug');
+				if(debugging.innerHTML != '') debugging.innerHTML += '\n';
+				debugging.innerHTML += text;
+			}
+			
+			function playFile(id) {
+				if(id == undefined || id == '') {
+					alert("ERROR: Empty filename to play!");
+					return;
+				}
+				if(player == null) {
+					alert("ERROR: Player element not found!");
+					return;
+				}
+				if(file == id) {
+					player.play();
+				} else {
+					
+				}
+			}
+			
+			function playerClean() {
+				if(player == null) {
+					alert("ERROR: Player element not found!");
+					return;
+				}
+				player.innerHTML = '';
+				player.load();
+			}
+			
+			function playerAddFile() {
+				
+			}
+			
+			function play() {
+				debug("play():");
+				if(playlist.length == 0) {
+					alert("ERROR: Empty playlist!");
+					return;
+				}
+				debug("\tplaylist["+playlist.length+"]: "+playlist.toString());
+				if(player == null) {
+					alert("ERROR: Player element not found!");
+					return;
+				}
+				
+				debug("\tplayer: ");
+				debug("\t\tpaused: "+player.paused);
+				debug("\t\tended: "+player.ended);
+				if(player.audioTracks.length == 0) {
+					if(playing == playlist.length -1 ) { // Last song played
+						playing = 0;
+					}
+				}
+				player.play();
+			}
+			
+			/*$(document).ready(function() {
+				
+			});*/
+		</script>
+	</body>
+</html>
