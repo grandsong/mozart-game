@@ -1,25 +1,31 @@
 <html>
 	<head>
 		<!--<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>-->
+		<script type="text/javascript" src="./minuet.js"></script>
+		<script type="text/javascript" src="./trio.js"></script>
 	</head>
 	<body>
 		<div id="list_m"></div>
+		<div id="list_t"></div>
 		<audio id="player" controls>
 			<!--<source src="./mp3/M1.mp3" type="audio/mpeg">
 			<source src="./mp3/M10.mp3" type="audio/mpeg">-->
 		Your browser does not support the audio element.
-		</audio>
+		</audio><br>
+		Current playing: <input type="text" id="playing"><br>
+		In queue: <input type="text" id="playing" size="50"><br>
 		<br>
 		<button onclick="play();">Play</button>
 		<button onclick="playFile(5);">Play</button>
 		<br>
-		<textarea id="debug" rows="20" cols="100"></textarea>
+		<textarea id="debug" rows="20" cols="100" readonly="true"></textarea>
 		<script type="text/javascript">
 			// Constants
 			var dir = "./mp3/";
 			var ext = ".mp3"
 			var player = document.getElementById('player');
 			var list_m = document.getElementById('list_m');
+			var list_t = document.getElementById('list_t');
 			
 			// Variables
 			var playlist = new Array(5, 10, 103, 29);
@@ -96,26 +102,61 @@
 			}
 
 			function init_m() {
-				var max = 176;
-				var cols = 16;
+				if(minuet == null) {
+					alert("ERROR: config for minuet not found!");
+					return;
+				}
 
 				if(list_m == null) {
 					alert("ERROR: list_m not found!");
 					return;
 				}
+
+				var rows = minuet.length;
 				
 				var html = '';
 				html += '<table border="1">'
-				for(i = 1; i <= max; i++) {
-					if((i-1) % cols == 0) html += '<tr>';
-					html += "<td><button onclick=\"playFile('M"+i+"')\">"+i+"</button></td>";
-					if(i % cols == 0) html += '</tr>';
+				for(r = 0; r < rows; r++) {
+					html += '<tr>';
+					for(c = 0; c < minuet[r].length; c++) {
+						var id = minuet[r][c];
+						html += "<td><button onclick=\"playFile('M"+id+"')\">"+id+"</button></td>";
+					}
+					html += '</tr>';
 				}
 				html += '</table>'
 				list_m.innerHTML = html;
 			}
 
+			function init_t() {
+				if(trio == null) {
+					alert("ERROR: config for trio not found!");
+					return;
+				}
+
+				if(list_t == null) {
+					alert("ERROR: list_m not found!");
+					return;
+				}
+
+				var rows = trio.length;
+				
+				var html = '';
+				html += '<table border="1">'
+				for(r = 0; r < rows; r++) {
+					html += '<tr>';
+					for(c = 0; c < trio[r].length; c++) {
+						var id = trio[r][c];
+						html += "<td><button onclick=\"playFile('T"+id+"')\">"+id+"</button></td>";
+					}
+					html += '</tr>';
+				}
+				html += '</table>'
+				list_t.innerHTML = html;
+			}
+
 			init_m();
+			init_t();
 			
 			/*$(document).ready(function() {
 				
