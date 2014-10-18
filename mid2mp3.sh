@@ -38,8 +38,8 @@ function mp3cut {
 	mp3l="$mp3l_dir/$filename.$mp3l_ext"
 	mp3="$mp3_dir/$filename.$mp3_ext"
 	echo "-- mp3cut $mp3l -> $mp3"
-	#ffmpeg -ss $start -t $duration -i $mp3l $mp3
-	cp $mp3l $mp3
+	ffmpeg -ss $start -t $duration -i $mp3l -c:v copy -c:a copy $mp3
+	#cp $mp3l $mp3
 }
 
 function all_mid {

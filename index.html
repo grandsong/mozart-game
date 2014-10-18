@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
 		<script type="text/javascript" src="./minuet.js"></script>
 		<script type="text/javascript" src="./trio.js"></script>
 		<style>
@@ -16,18 +17,18 @@
 		</style>
 	</head>
 	<body>
-		<div id="html_minuets"></div>
-		<div id="html_trios"></div>
+		<div id="minuets"></div>
+		<div id="trios"></div>
 		<audio id="player" controls>
 			Your browser does not support the audio element.
 		</audio><br>
-		Current playing: <input type="text" id="html_playing"><br>
-		Queue: <input type="text" id="html_queue" size="50"><br>
-		Song: <input type="text" id="html_song" size="50"><br>
+		Current playing: <input type="text" id="playing"><br>
+		Queue: <input type="text" id="queue" size="80"><br>
+		Song: <input type="text" id="song" size="80"><br>
 		<button onclick="playSong();">Play song</button><br>
-		<button onclick="minuet_generate();">Generate minuet</button><br>
+		<button onclick="song_generate('M');">Generate minuet</button><br>
+		<button onclick="song_generate('T');">Generate trio</button><br>
 		<br>
-		<div id ="html_debug"></div>
 		<script type="text/javascript">
 			// Parameters
 			var DEBUG = true;
@@ -38,44 +39,55 @@
 
 			// Html elements
 			var player = document.getElementById('player');
-			var html_minuets = document.getElementById('html_minuets');
-			var html_trios = document.getElementById('html_trios');
-			var html_playing = document.getElementById('html_playing');
-			var html_queue = document.getElementById('html_queue');
-			var html_song = document.getElementById('html_song');
 
 			// Variables
 			var queue = new Array();
-			var playing = undefined;
-			var song = undefined;
+			var playing = "";
+			var song = new Array();
 			
 			// Functions
-			function debug_init() {
-				if(!DEBUG) return;
-				var html_debug = document.getElementById('html_debug');
-				if(html_debug == null) {
-					alert("ERROR: HTML element for debug not found!")
-					return;
+			function var_exist(id) {
+				if(id == undefined || id == null) {
+					alert("ERROR: Script not working properly!");
+					throw "Variable \""+id+"\" not defined or null!";
 				}
-				html_debug.innerHTML = 'Debug:<br>\n<textarea id="debug" rows="20" cols="100" readonly="true">debug_init();</textarea>';
+			}
+
+			function html_get(id) {
+				var element = $("#"+id);
+				if(element.length <= 0 || element == undefined || element == null) {
+					alert("ERROR: Page not loaded properly!");
+					throw "HTML element "+id+" not found!";
+				}
+				return element;
+			}
+
+			function player_exist() {
+				if(player == null || player == undefined) {
+					alert("ERROR: Player element not found!");
+					throw "Player not found!"
+				}
 			}
 
 			function debug(text) {
 				if(!DEBUG) return;
-				var debugging = document.getElementById('debug');
-				if(debugging.innerHTML != '') debugging.innerHTML += '\n';
-				debugging.innerHTML += text;
+				console.log(text);
+			}
+
+			function switchBar(id) {
+				var_exist(id);
 			}
 			
 			function playFile(id) {
-				if(id == undefined || id == '') {
-					alert("ERROR: Empty filename to play!");
-					return;
-				}
-				if(player == null) {
-					alert("ERROR: Player element not found!");
-					return;
-				}
+				var_exist(id);
+				player_exist();
+				var_exist(song);
+
+				/*if(song.length > 0) {
+						switchBar(id);
+						return;
+				}*/
+
 				if(playing == id) {
 					player.play();
 				} else {
@@ -86,31 +98,63 @@
 			}
 
 			function playerAddFile(id) {
-				if(player == null) {
-					alert("ERROR: Player element not found!");
-					return;
-				}
+				player_exist();
 				file = dir+id+ext;
 				debug("playerAddFile("+id+"):"+file);
 				player.innerHTML = "<source src=\""+file+"\" type=\"audio/mpeg\">";
-				html_playing.value = id;
+				playing = id;
+				preview();
 				player.load();
 			}
 			
 			function playerClean() {
 				debug("playerClean():");
-				if(player == null) {
-					alert("ERROR: Player element not found!");
-					return;
-				}
+				player_exist();
 				debug("playerClean()");
 				player.innerHTML = '';
 				player.load();
 			}
+
+			function playStop() {
+				debug("playStop():")
+				var_exist(playing);
+				var_exist(queue);
+				player_exist();
+				player.innerHTML = '';
+				playing = '';
+				preview();
+				if(queue.length > 0) {
+					playFile(queue[0]);
+					queue.shift(); // Remove first element;
+				}
+			}
 			
 			function playSong() {
 				debug("playSong():");
-				if(playlist.length == 0) {
+
+				var_exist(song);
+				var_exist(queue);
+				var_exist(playing);
+
+				if(song.length <= 0) {
+					alert("You must generate song at first.")
+					return;
+				}
+
+				if(queue.lenth == 0) {
+					// Song was all played, start again
+					queue = song;
+				}
+
+				playFile(queue[0]);
+				queue.shift();
+
+				if(playing != "") {
+
+				}
+				//player.addEventListener("onended", playSong);
+
+				/*if(playlist.length == 0) {
 					alert("ERROR: Empty playlist!");
 					return;
 				}
@@ -128,7 +172,7 @@
 						playing = 0;
 					}
 				}
-				player.play();
+				player.play();*/
 			}
 
 			function dice_toss(top) {
@@ -136,119 +180,126 @@
 				return Math.floor(Math.random() * top);
 			}
 
-			function minuet_generate() {
-				debug("minuet_generate():")
-				if(minuet == null) {
-					alert("ERROR: config for minuet not found!");
-					return;
+			function preview() {
+				debug("preview()");
+				var_exist(song);
+				var_exist(queue);
+				var_exist(playing);
+
+				var html_song = html_get("song");
+				var html_queue = html_get("queue");
+				var html_playing = html_get("playing");
+
+				html_song.val(song.join(","));
+				html_queue.val(queue.join(","));
+				html_playing.val(playing);
+
+				player.load();
+			}
+
+			function song_clear() {
+				// Clear song and queue
+				song = [];
+				queue = [];
+				playing = "";
+				// Remove files from player
+				player.innerHTML = '';
+				// Reload variables and player
+				preview();
+				// Clear selections
+				$('.song').removeClass('song');
+			}
+
+			function get_html_bars(id) {
+				debug("get_html_bars("+id+")");
+				switch(id) {
+					case 'M':
+						html_bars = html_get("minuets");
+					break
+					case 'T':
+						html_bars = html_get("trios");
+					break
+					default:
+						alert("ERROR: Unknow type of song!");
+						throw "Wrong type "+id+" for get_html_bars()";
 				}
+				return html_bars;
+			}
 
-				if(html_minuets == null) {
-					alert("ERROR: html_minuets not found!");
-					return;
+			function get_bars(id) {
+				debug("get_bars("+id+")");
+				switch(id) {
+					case 'M':
+						bars = minuet;
+					break
+					case 'T':
+						bars = trio;
+					break
+					default:
+						alert("ERROR: Unknow type of song!");
+						throw "Wrong type "+id+" for get_bars()";
 				}
+				var_exist(bars);
+				return bars;
+			}
 
-				if(html_song == null) {
-					alert("ERROR: html_song not found!");
-					return;
-				}
+			function song_generate(id) {
+				debug("song_generate("+id+")");
 
-				if(html_queue == null) {
-					alert("ERROR: html_queue not found!");
-					return;
-				}
+				bars = get_bars(id);
 
-				html_song.value = '';
-				html_queue.value = '';
-				// Clear minuet selections
-				minuet_clear();
-				// Clear trios selections
+				var_exist(bars);
+				var_exist(song);
+				var_exist(queue);
 
-				var rows = minuet.length;
-				var cols = minuet[0].length;
+				var rows = bars.length;
+				var cols = bars[0].length;
+
+				song_clear();
+
 				debug("rows: "+rows+", cols: "+cols);
+
 				for(col = 0; col < cols; col++) {
-					row = dice_toss(11);
-					//debug("row: "+row+", col: "+col);
-					id = minuet[row][col];
-					//debug(" => "+id);
-					html_song.value += 'M'+id+",";
-					document.getElementById("M"+id).className = 'song';
+					row = dice_toss(rows);
+					bar = bars[row][col];
+					song.push(id+bar);
+					html_get(id+bar).addClass('song');
 				}
+				queue = song;
+				debug(song);
+				preview();
 			}
 
-			function minuets_init() {
-				debug("minuets_init():");
-				if(minuet == null) {
-					alert("ERROR: config for minuet not found!");
-					return;
-				}
+			function bars_init(id) {
+				debug("bars_init("+id+")");
+				bars = get_bars(id);
+				html_bars = get_html_bars(id);
 
-				if(html_minuets == null) {
-					alert("ERROR: html_minuets not found!");
-					return;
-				}
-
-				var rows = minuet.length;
+				var rows = bars.length;
 				
 				var html = '';
 				html += '<table border="1">'
 				for(r = 0; r < rows; r++) {
 					html += '<tr>';
-					for(c = 0; c < minuet[r].length; c++) {
-						var id = minuet[r][c];
-						html += "<td><button class=\"bar\" id=\"M"+id+"\" onclick=\"playFile('M"+id+"')\">"+id+"</button></td>";
+					for(c = 0; c < bars[r].length; c++) {
+						var bar = bars[r][c];
+						html += '<td><button class="bar bar'+c+'" id="'+id+bar+'" onclick="playFile(\''+id+bar+'\')">'+bar+'</button></td>';
 					}
 					html += '</tr>';
 				}
 				html += '</table>'
-				html_minuets.innerHTML = html;
+				html_bars.html(html);
 			}
 
-			function minuet_clear() {
-				debug("minuet_clear():")
-				var elements = document.getElementsByClassName("song");
-				debug("song elemengs: "+elements.length);
-				for (var i = 0; i < elements.length; i++) {
-					elements[i].className = 'bar';
-					//debug("\tclearing: "+elements[id].innerHTML);
-				}
-				elements = document.getElementsByClassName("song");
-				debug("song elemengs: "+elements.length);
-			}
-
-			function trios_init() {
-				debug("trios_init():");
-				if(trio == null) {
-					alert("ERROR: config for trio not found!");
-					return;
-				}
-
-				if(html_trios == null) {
-					alert("ERROR: html_minuets not found!");
-					return;
-				}
-
-				var rows = trio.length;
-				
-				var html = '';
-				html += '<table border="1">'
-				for(r = 0; r < rows; r++) {
-					html += '<tr>';
-					for(c = 0; c < trio[r].length; c++) {
-						var id = trio[r][c];
-						html += "<td><button class=\"trios\" id=\"T"+id+"\ onclick=\"playFile('T"+id+"')\">"+id+"</button></td>";
-					}
-					html += '</tr>';
-				}
-				html += '</table>'
-				html_trios.innerHTML = html;
+			function player_init(){
+				player_exist();
+				player.addEventListener("ended", playStop);
 			}
 
 			// MAIN
-			debug_init();
-			minuets_init();
-			trios_init();
+			bars_init("M");
+			bars_init("T");
+			player_init();
 		</script>
 	</body>
 </html>
