@@ -13,6 +13,8 @@ mp3_ext="mp3"
 # Tim for cutting
 start="00.07"
 duration="01.83" # in seconds
+from="00:00:00.10"
+to="00:00:01.70"
 # Packages required
 packages=( "timidity" "lame" "ffmpeg" )
 
@@ -38,7 +40,8 @@ function mp3cut {
 	mp3l="$mp3l_dir/$filename.$mp3l_ext"
 	mp3="$mp3_dir/$filename.$mp3_ext"
 	echo "-- mp3cut $mp3l -> $mp3"
-	ffmpeg -ss $start -t $duration -i $mp3l -c:v copy -c:a copy $mp3
+	#ffmpeg -ss $start -t $duration -i $mp3l -c:v copy -c:a copy $mp3
+	mpgsplit $mp3l [$from-$to] -o $mp3
 	#cp $mp3l $mp3
 }
 
