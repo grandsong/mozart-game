@@ -1,0 +1,87 @@
+<html>
+	<head>
+		<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
+		<style>
+			button.bar {
+				width: 40px;
+				text-align: center;
+			}
+
+			button.song {
+				background-color: lightgreen;
+				width: 40px;
+				text-align: center;				
+			}
+		</style>
+	</head>
+	<body>
+		<audio id="bar1" controls><source src="./mp3_uncut/M96.mp3" type="audio/mpeg"></audio>
+		<audio id="bar2" controls><source src="./mp3_uncut/M22.mp3" type="audio/mpeg"></audio>
+		<audio id="bar3" controls><source src="./mp3_uncut/M141.mp3" type="audio/mpeg"></audio>
+		<audio id="bar4" controls><source src="./mp3_uncut/M41.mp3" type="audio/mpeg"></audio>
+		<audio id="bar5" controls><source src="./mp3_uncut/M105.mp3" type="audio/mpeg"></audio>
+		<audio id="bar6" controls><source src="./mp3_uncut/M122.mp3" type="audio/mpeg"></audio>
+		<audio id="bar7" controls><source src="./mp3_uncut/M11.mp3" type="audio/mpeg"></audio>
+		<audio id="bar8" controls><source src="./mp3_uncut/M30.mp3" type="audio/mpeg"></audio>
+		<audio id="bar9" controls><source src="./mp3_uncut/M70.mp3" type="audio/mpeg"></audio>
+		<audio id="bar10" controls><source src="./mp3_uncut/M121.mp3" type="audio/mpeg"></audio>
+		<audio id="bar11" controls><source src="./mp3_uncut/M26.mp3" type="audio/mpeg"></audio>
+		<audio id="bar12" controls><source src="./mp3_uncut/M9.mp3" type="audio/mpeg"></audio>
+		<audio id="bar13" controls><source src="./mp3_uncut/M112.mp3" type="audio/mpeg"></audio>
+		<audio id="bar14" controls><source src="./mp3_uncut/M49.mp3" type="audio/mpeg"></audio>
+		<audio id="bar15" controls><source src="./mp3_uncut/M109.mp3" type="audio/mpeg"></audio>
+		<audio id="bar16" controls><source src="./mp3_uncut/M14.mp3" type="audio/mpeg"></audio>
+		<br>
+		<button onclick="play(1)">Play all</button>
+		<script type="text/javascript">
+			function play(id) {
+				var bar = document.getElementById("bar"+id);
+				if(bar == undefined) {
+					return;
+				}
+				var nid = id + 1;
+				bar.play();
+				setTimeout(function() {play(nid)},1800);
+			}
+			/*function play() {
+				var bar1 = document.getElementById("bar1");
+				var bar2 = document.getElementById("bar2");
+				bar1.play();
+				setTimeout(function() {bar2.play()},1800);
+			}
+			function play1() {
+				var bar1 = document.getElementById("bar1");
+				var bar2 = document.getElementById("bar2");
+				bar1.play();
+				//window.setTimeout(bar2.play(),1800);
+			}*/
+
+			//document.getElementById('bar1').addEventListener("ended", play());
+
+			/*var bar1 = document.getElementById("bar1");
+			var bar2 = document.getElementById("bar2");
+			var bar3 = document.getElementById("bar3");
+			var bar4 = document.getElementById("bar4");
+			var bar5 = document.getElementById("bar5");
+			bar1.onended = function() {
+			    console.log("bar1 ended");
+			    bar2.play();
+			};
+			bar2.onended = function() {
+			    console.log("bar2 ended");
+			    bar3.play();
+			};
+			bar3.onended = function() {
+			    console.log("bar3 ended");
+			    bar4.play();
+			};
+			bar4.onended = function() {
+			    console.log("bar4 ended");
+			    bar5.play();
+			};*/
+
+			//document.getElementById('bar1').play();
+			//document.getElementById('bar1').addEventListener("ended", alert('now'));
+		</script>
+	</body>
+</html>

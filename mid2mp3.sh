@@ -14,7 +14,7 @@ mp3_ext="mp3"
 start="00.07"
 duration="01.83" # in seconds
 from="00:00:00.10"
-to="00:00:01.70"
+to="00:00:01.60"
 # Packages required
 packages=( "timidity" "lame" "ffmpeg" )
 
