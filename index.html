@@ -21,7 +21,7 @@
 	<body>
 		<div id="minuets"></div>
 		<div id="trios"></div>
-		<audio id="player" controls>Your browser does not support the audio element.</audio>
+		<audio id="player">Your browser does not support the audio element.</audio>
 		<div id="players">Your browser does not support JavaScript.</div>
 		<button id="song_play" onclick="song_play(0);" disabled="true">Play song</button> <button id="song_stop" onclick="song_stop();" disabled="true">Stop song</button><br>
 		<button onclick="song_generate('M');">Generate minuet</button><br>
@@ -240,7 +240,8 @@
 				player.html("");
 				for(var i = 0; i< BARS_COUNT; i++) {
 					debug("player_init("+i+")");
-					player.append('<audio id="player'+i+'" controls></audio>');
+					// controls
+					player.append('<audio id="player'+i+'"></audio>');
 				}
 			}
 
