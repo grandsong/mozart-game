@@ -4,15 +4,17 @@
 		<script type="text/javascript" src="./minuet.js"></script>
 		<script type="text/javascript" src="./trio.js"></script>
 		<style>
-			button.bar {
+			.bar {
 				width: 40px;
 				text-align: center;
 			}
 
-			button.song {
-				background-color: lightgreen;
-				width: 40px;
-				text-align: center;				
+			.song {
+				background-color: lightgreen;	
+			}
+
+			.playing {
+				background-color: pink;		
 			}
 		</style>
 	</head>
@@ -22,7 +24,7 @@
 		<audio id="player" controls>Your browser does not support the audio element.</audio>
 		<div id="players">Your browser does not support JavaScript.</div>
 		Song: <input type="text" id="song" size="80"><br>
-		<button onclick="song_play(0);">Play song</button><br>
+		<button onclick="song_play(0);">Play song</button> <button onclick="song_stop();">Stop song</button><br>
 		<button onclick="song_generate('M');">Generate minuet</button><br>
 		<button onclick="song_generate('T');">Generate trio</button><br>
 		<br>
@@ -37,6 +39,7 @@
 
 			// Variables
 			var song = new Array();
+			var playing = new Array();
 
 			// Html elements
 			var bar = document.getElementById("bar");
@@ -73,6 +76,7 @@
 			
 			// Play bar - preview play
 			function bar_play(bar) {
+				song_stop();
 				debug("bar_play("+bar+")");
 				bar_file(bar)
 				document.getElementById("player").play();
@@ -96,17 +100,30 @@
 			}
 			
 			function song_play(bar_i) {
+				if(bar_i == 0) {
+					song_stop();
+				}
 				var bar = document.getElementById("player"+bar_i);
 				if(bar == undefined) {
 					return;
 				}
 				var nid = bar_i + 1;
 				bar.play();
-				setTimeout(function() {song_play(nid)},1800);
+				playing[bar_i] = setTimeout(function() {song_play(nid)},1800);
+				$('.playing').removeClass('playing');
+				debug(".bar"+bar_i+" .song");
+				$(".bar"+bar_i+".song").addClass('playing');
 			}
 
 			function song_stop() {
-
+				debug("song_stop()");
+				for(var i = 0; i < playing.length; i ++) {
+					debug("song_stop("+i+")");
+					clearTimeout(playing[i]);
+					var player = document.getElementById("player"+i);
+					player.pause();
+					player.currentTime = 0.00;
+				}
 			}
 
 			function song_again() {
@@ -117,6 +134,7 @@
 				html_get("song").val("");
 				song = [];
 				$('.song').removeClass('song');
+				$('.playing').removeClass('playing');
 			}
 
 			function song_preview() {
