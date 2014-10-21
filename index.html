@@ -19,33 +19,30 @@
 	<body>
 		<div id="minuets"></div>
 		<div id="trios"></div>
-		<audio id="player" controls>
-			Your browser does not support the audio element.
-		</audio><br>
-		Current playing: <input type="text" id="playing"><br>
-		Queue: <input type="text" id="queue" size="80"><br>
+		<audio id="player" controls>Your browser does not support the audio element.</audio>
+		<div id="players">Your browser does not support JavaScript.</div>
 		Song: <input type="text" id="song" size="80"><br>
-		<button onclick="playSong();">Play song</button><br>
+		<button onclick="song_play(0);">Play song</button><br>
 		<button onclick="song_generate('M');">Generate minuet</button><br>
 		<button onclick="song_generate('T');">Generate trio</button><br>
 		<br>
 		<script type="text/javascript">
 			// Parameters
 			var DEBUG = true;
+			var BARS_COUNT = 16;
 
 			// Constants
-			var dir = "./mp3/";
+			var dir = "./mp3_uncut/";
 			var ext = ".mp3"
 
-			// Html elements
-			var player = document.getElementById('player');
-
 			// Variables
-			var queue = new Array();
-			var playing = "";
 			var song = new Array();
+
+			// Html elements
+			var bar = document.getElementById("bar");
 			
 			// Functions
+			// Control if variable exists and is not null
 			function var_exist(id) {
 				if(id == undefined || id == null) {
 					alert("ERROR: Script not working properly!");
@@ -53,7 +50,9 @@
 				}
 			}
 
+			// Return jQuery object from html element with id
 			function html_get(id) {
+				debug("html_get("+id+")")
 				var element = $("#"+id);
 				if(element.length <= 0 || element == undefined || element == null) {
 					alert("ERROR: Page not loaded properly!");
@@ -62,152 +61,72 @@
 				return element;
 			}
 
-			function player_exist() {
-				if(player == null || player == undefined) {
-					alert("ERROR: Player element not found!");
-					throw "Player not found!"
-				}
-			}
-
 			function debug(text) {
 				if(!DEBUG) return;
 				console.log(text);
 			}
 
-			function switchBar(id) {
+			// Change bar of generated song
+			function bar_change(id) {
 				var_exist(id);
 			}
 			
-			function playFile(id) {
-				var_exist(id);
-				player_exist();
-				var_exist(song);
-
-				/*if(song.length > 0) {
-						switchBar(id);
-						return;
-				}*/
-
-				if(playing == id) {
-					player.play();
-				} else {
-					playerClean();
-					playerAddFile(id);
-					player.play();
-				}
+			// Play bar - preview play
+			function bar_play(bar) {
+				debug("bar_play("+bar+")");
+				bar_file(bar)
+				document.getElementById("player").play();
 			}
 
-			function playerAddFile(id) {
-				player_exist();
-				file = dir+id+ext;
-				debug("playerAddFile("+id+"):"+file);
+			function bar_stop(bar) {
+
+			}
+
+			function bar_file(bar,player_id) {
+				if(player_id == undefined) player_id = "";
+				debug("bar_file("+bar+","+player_id+")");
+				file = dir+bar+ext;
+				var player = document.getElementById("player"+player_id);
+				if(player == undefined) {
+					alert("ERROR: player not found!");
+				}
+				//debug("playerAddFile("+id+"):"+file);
 				player.innerHTML = "<source src=\""+file+"\" type=\"audio/mpeg\">";
-				playing = id;
-				preview();
 				player.load();
 			}
 			
-			function playerClean() {
-				debug("playerClean():");
-				player_exist();
-				debug("playerClean()");
-				player.innerHTML = '';
-				player.load();
+			function song_play(bar_i) {
+				var bar = document.getElementById("player"+bar_i);
+				if(bar == undefined) {
+					return;
+				}
+				var nid = bar_i + 1;
+				bar.play();
+				setTimeout(function() {song_play(nid)},1800);
 			}
 
-			function playStop() {
-				debug("playStop():")
-				var_exist(playing);
-				var_exist(queue);
-				player_exist();
-				player.innerHTML = '';
-				playing = '';
-				preview();
-				if(queue.length > 0) {
-					playFile(queue[0]);
-					queue.shift(); // Remove first element;
-				}
+			function song_stop() {
+
 			}
-			
-			function playSong() {
-				debug("playSong():");
 
-				var_exist(song);
-				var_exist(queue);
-				var_exist(playing);
+			function song_again() {
 
-				if(song.length <= 0) {
-					alert("You must generate song at first.")
-					return;
-				}
+			}
 
-				if(queue.lenth == 0) {
-					// Song was all played, start again
-					queue = song;
-				}
+			function song_clear() {
+				html_get("song").val("");
+				song = [];
+				$('.song').removeClass('song');
+			}
 
-				playFile(queue[0]);
-				queue.shift();
-
-				if(playing != "") {
-
-				}
-				//player.addEventListener("onended", playSong);
-
-				/*if(playlist.length == 0) {
-					alert("ERROR: Empty playlist!");
-					return;
-				}
-				debug("\tplaylist["+playlist.length+"]: "+playlist.toString());
-				if(player == null) {
-					alert("ERROR: Player element not found!");
-					return;
-				}
-				
-				debug("\tplayer: ");
-				debug("\t\tpaused: "+player.paused);
-				debug("\t\tended: "+player.ended);
-				if(player.audioTracks.length == 0) {
-					if(playing == playlist.length -1 ) { // Last song played
-						playing = 0;
-					}
-				}
-				player.play();*/
+			function song_preview() {
+				var html_song = html_get("song");
+				html_song.val(song.join(","));
 			}
 
 			function dice_toss(top) {
 				// Generate number in the interval <0;top)
 				return Math.floor(Math.random() * top);
-			}
-
-			function preview() {
-				debug("preview()");
-				var_exist(song);
-				var_exist(queue);
-				var_exist(playing);
-
-				var html_song = html_get("song");
-				var html_queue = html_get("queue");
-				var html_playing = html_get("playing");
-
-				html_song.val(song.join(","));
-				html_queue.val(queue.join(","));
-				html_playing.val(playing);
-
-				player.load();
-			}
-
-			function song_clear() {
-				// Clear song and queue
-				song = [];
-				queue = [];
-				playing = "";
-				// Remove files from player
-				player.innerHTML = '';
-				// Reload variables and player
-				preview();
-				// Clear selections
-				$('.song').removeClass('song');
 			}
 
 			function get_html_bars(id) {
@@ -250,7 +169,6 @@
 
 				var_exist(bars);
 				var_exist(song);
-				var_exist(queue);
 
 				var rows = bars.length;
 				var cols = bars[0].length;
@@ -264,10 +182,10 @@
 					bar = bars[row][col];
 					song.push(id+bar);
 					html_get(id+bar).addClass('song');
+					bar_file(id+bar,col);
 				}
-				queue = song;
 				debug(song);
-				preview();
+				song_preview();
 			}
 
 			function bars_init(id) {
@@ -283,7 +201,7 @@
 					html += '<tr>';
 					for(c = 0; c < bars[r].length; c++) {
 						var bar = bars[r][c];
-						html += '<td><button class="bar bar'+c+'" id="'+id+bar+'" onclick="playFile(\''+id+bar+'\')">'+bar+'</button></td>';
+						html += '<td><button class="bar bar'+c+'" id="'+id+bar+'" onclick="bar_play(\''+id+bar+'\')">'+bar+'</button></td>';
 					}
 					html += '</tr>';
 				}
@@ -292,8 +210,13 @@
 			}
 
 			function player_init(){
-				player_exist();
-				player.addEventListener("ended", playStop);
+				debug("player_init");
+				player = html_get("players");
+				player.html("");
+				for(var i = 0; i< BARS_COUNT; i++) {
+					debug("player_init("+i+")");
+					player.append('<audio id="player'+i+'" controls></audio>');
+				}
 			}
 
 			// MAIN
