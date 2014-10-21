@@ -23,10 +23,10 @@
 		<div id="trios"></div>
 		<audio id="player" controls>Your browser does not support the audio element.</audio>
 		<div id="players">Your browser does not support JavaScript.</div>
-		Song: <input type="text" id="song" size="80"><br>
-		<button onclick="song_play(0);">Play song</button> <button onclick="song_stop();">Stop song</button><br>
+		<button id="song_play" onclick="song_play(0);" disabled="true">Play song</button> <button id="song_stop" onclick="song_stop();" disabled="true">Stop song</button><br>
 		<button onclick="song_generate('M');">Generate minuet</button><br>
 		<button onclick="song_generate('T');">Generate trio</button><br>
+		Song: <input type="text" id="song" size="80" readonly="true"><br>
 		<br>
 		<script type="text/javascript">
 			// Parameters
@@ -102,9 +102,13 @@
 			function song_play(bar_i) {
 				if(bar_i == 0) {
 					song_stop();
+					$('#song_stop').prop('disabled', false);
+					$('#song_play').prop('disabled', true);
 				}
 				var bar = document.getElementById("player"+bar_i);
 				if(bar == undefined) {
+					$('#song_stop').prop('disabled', true);
+					$('#song_play').prop('disabled', false);
 					return;
 				}
 				var nid = bar_i + 1;
@@ -124,6 +128,8 @@
 					player.pause();
 					player.currentTime = 0.00;
 				}
+					$('#song_stop').prop('disabled', true);
+					$('#song_play').prop('disabled', false);
 			}
 
 			function song_again() {
@@ -204,6 +210,7 @@
 				}
 				debug(song);
 				song_preview();
+				$('#song_play').prop('disabled', false);
 			}
 
 			function bars_init(id) {
