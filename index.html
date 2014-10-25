@@ -1,254 +1,205 @@
-<html>
-	<head>
-		<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
-		<script type="text/javascript" src="./minuet.js"></script>
-		<script type="text/javascript" src="./trio.js"></script>
-		<style>
-			.bar {
-				width: 40px;
-				text-align: center;
-			}
+<!DOCTYPE html>
+<html lang="en">
 
-			.song {
-				background-color: lightgreen;	
-			}
+<head>
 
-			.playing {
-				background-color: pink;		
-			}
-		</style>
-	</head>
-	<body>
-		<div id="minuets"></div>
-		<div id="trios"></div>
-		<audio id="player">Your browser does not support the audio element.</audio>
-		<div id="players">Your browser does not support JavaScript.</div>
-		<button id="song_play" onclick="song_play(0);" disabled="true">Play song</button> <button id="song_stop" onclick="song_stop();" disabled="true">Stop song</button><br>
-		<button onclick="song_generate('M');">Generate minuet</button><br>
-		<button onclick="song_generate('T');">Generate trio</button><br>
-		Song: <input type="text" id="song" size="80" readonly="true"><br>
-		<br>
-		<script type="text/javascript">
-			// Parameters
-			var DEBUG = true;
-			var BARS_COUNT = 16;
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Martin Vicián">
 
-			// Constants
-			var dir = "./mp3/";
-			var ext = ".mp3"
+    <title>Mozart Dice Game</title>
 
-			// Variables
-			var song = new Array();
-			var playing = new Array();
+    <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-			// Html elements
-			var bar = document.getElementById("bar");
-			
-			// Functions
-			// Control if variable exists and is not null
-			function var_exist(id) {
-				if(id == undefined || id == null) {
-					alert("ERROR: Script not working properly!");
-					throw "Variable \""+id+"\" not defined or null!";
-				}
-			}
+    <!-- Custom CSS -->
+    <link href="css/freelancer.css" rel="stylesheet">
 
-			// Return jQuery object from html element with id
-			function html_get(id) {
-				debug("html_get("+id+")")
-				var element = $("#"+id);
-				if(element.length <= 0 || element == undefined || element == null) {
-					alert("ERROR: Page not loaded properly!");
-					throw "HTML element "+id+" not found!";
-				}
-				return element;
-			}
+    <link href="css/mozart.css" rel="stylesheet">
 
-			function debug(text) {
-				if(!DEBUG) return;
-				console.log(text);
-			}
+    <!-- Custom Fonts -->
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
-			// Change bar of generated song
-			function bar_change(id) {
-				var_exist(id);
-			}
-			
-			// Play bar - preview play
-			function bar_play(bar) {
-				song_stop();
-				debug("bar_play("+bar+")");
-				bar_file(bar)
-				document.getElementById("player").play();
-			}
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-			function bar_stop(bar) {
+</head>
 
-			}
+<body id="page-top" class="index">
 
-			function bar_file(bar,player_id) {
-				if(player_id == undefined) player_id = "";
-				debug("bar_file("+bar+","+player_id+")");
-				file = dir+bar+ext;
-				var player = document.getElementById("player"+player_id);
-				if(player == undefined) {
-					alert("ERROR: player not found!");
-				}
-				//debug("playerAddFile("+id+"):"+file);
-				player.innerHTML = "<source src=\""+file+"\" type=\"audio/mpeg\">";
-				player.load();
-			}
-			
-			function song_play(bar_i) {
-				if(bar_i == 0) {
-					song_stop();
-					$('#song_stop').prop('disabled', false);
-					$('#song_play').prop('disabled', true);
-				}
-				var bar = document.getElementById("player"+bar_i);
-				if(bar == undefined) {
-					$('#song_stop').prop('disabled', true);
-					$('#song_play').prop('disabled', false);
-					return;
-				}
-				var nid = bar_i + 1;
-				bar.play();
-				playing[bar_i] = setTimeout(function() {song_play(nid)},1800);
-				$('.playing').removeClass('playing');
-				debug(".bar"+bar_i+" .song");
-				$(".bar"+bar_i+".song").addClass('playing');
-			}
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top navbar-shrink">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#page-top">Mozart Dice Game</a>
+            </div>
 
-			function song_stop() {
-				debug("song_stop()");
-				for(var i = 0; i < playing.length; i ++) {
-					debug("song_stop("+i+")");
-					clearTimeout(playing[i]);
-					var player = document.getElementById("player"+i);
-					player.pause();
-					player.currentTime = 0.00;
-				}
-					$('#song_stop').prop('disabled', true);
-					$('#song_play').prop('disabled', false);
-			}
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#game">Game</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#loop">Loop</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#about">About</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
 
-			function song_again() {
+    <section id="game">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="btn-group btn-toggle"> 
+                        <button class="btn btn-default active">Minuet</button>
+                        <button class="btn btn-primary">Trio</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <div id="minuets"></div>
+                        <div id="trios"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <audio id="player">Your browser does not support the audio element.</audio>
+                    <div id="players">Your browser does not support JavaScript.</div>
+                    <button id="song_play" onclick="song_play(0);" disabled="true">Play song</button> <button id="song_stop" onclick="song_stop();" disabled="true">Stop song</button><br>
+                    <button onclick="song_generate('M');">Generate minuet</button><br>
+                    <button onclick="song_generate('T');">Generate trio</button><br>
+                    Song: <input type="text" id="song" size="20" readonly="true"><br>
+                </div>
+            </div>
+        </div>
+    </section>
 
-			}
+    <section class="success" id="loop">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Loop</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+            
+        </div>
+    </section>
 
-			function song_clear() {
-				html_get("song").val("");
-				song = [];
-				$('.song').removeClass('song');
-				$('.playing').removeClass('playing');
-			}
+    <!-- Contact Section -->
+    <section id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Contact Me</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+        </div>
+    </section>
 
-			function song_preview() {
-				var html_song = html_get("song");
-				html_song.val(song.join(","));
-			}
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-4">
+                        <h3>Location</h3>
+                        <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>Around the Web</h3>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-dribbble"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>About Freelancer</h3>
+                        <p>Freelance is a free to use, open source Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; Your Website 2014
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-			function dice_toss(top) {
-				// Generate number in the interval <0;top)
-				return Math.floor(Math.random() * top);
-			}
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll visible-xs visble-sm">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
 
-			function get_html_bars(id) {
-				debug("get_html_bars("+id+")");
-				switch(id) {
-					case 'M':
-						html_bars = html_get("minuets");
-					break
-					case 'T':
-						html_bars = html_get("trios");
-					break
-					default:
-						alert("ERROR: Unknow type of song!");
-						throw "Wrong type "+id+" for get_html_bars()";
-				}
-				return html_bars;
-			}
+    <!-- jQuery Version 1.11.0 -->
+    <script src="js/jquery-1.11.0.js"></script>
 
-			function get_bars(id) {
-				debug("get_bars("+id+")");
-				switch(id) {
-					case 'M':
-						bars = minuet;
-					break
-					case 'T':
-						bars = trio;
-					break
-					default:
-						alert("ERROR: Unknow type of song!");
-						throw "Wrong type "+id+" for get_bars()";
-				}
-				var_exist(bars);
-				return bars;
-			}
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
 
-			function song_generate(id) {
-				debug("song_generate("+id+")");
+    <script src="mozart.js"></script>
 
-				bars = get_bars(id);
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="js/classie.js"></script>
+    <!--<script src="js/cbpAnimatedHeader.js"></script>-->
 
-				var_exist(bars);
-				var_exist(song);
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
 
-				var rows = bars.length;
-				var cols = bars[0].length;
+    <!-- Custom Theme JavaScript -->
+    <script src="js/freelancer.js"></script>
 
-				song_clear();
+</body>
 
-				debug("rows: "+rows+", cols: "+cols);
-
-				for(col = 0; col < cols; col++) {
-					row = dice_toss(rows);
-					bar = bars[row][col];
-					song.push(id+bar);
-					html_get(id+bar).addClass('song');
-					bar_file(id+bar,col);
-				}
-				debug(song);
-				song_preview();
-				$('#song_play').prop('disabled', false);
-			}
-
-			function bars_init(id) {
-				debug("bars_init("+id+")");
-				bars = get_bars(id);
-				html_bars = get_html_bars(id);
-
-				var rows = bars.length;
-				
-				var html = '';
-				html += '<table border="1">'
-				for(r = 0; r < rows; r++) {
-					html += '<tr>';
-					for(c = 0; c < bars[r].length; c++) {
-						var bar = bars[r][c];
-						html += '<td><button class="bar bar'+c+'" id="'+id+bar+'" onclick="bar_play(\''+id+bar+'\')">'+bar+'</button></td>';
-					}
-					html += '</tr>';
-				}
-				html += '</table>'
-				html_bars.html(html);
-			}
-
-			function player_init(){
-				debug("player_init");
-				player = html_get("players");
-				player.html("");
-				for(var i = 0; i< BARS_COUNT; i++) {
-					debug("player_init("+i+")");
-					// controls
-					player.append('<audio id="player'+i+'"></audio>');
-				}
-			}
-
-			// MAIN
-			bars_init("M");
-			bars_init("T");
-			player_init();
-		</script>
-	</body>
 </html>

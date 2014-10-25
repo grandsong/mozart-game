@@ -1,0 +1,12 @@
+.bar {
+	width: 40px;
+	text-align: center;
+}
+
+.song {
+	background-color: lightgreen;	
+}
+
+.playing {
+	background-color: pink;		
+}
