@@ -86,6 +86,12 @@ function bar_change(id) {
 }
 
 // Play bar - preview play
+/**
+ * @brief Play bar - preview play
+ * @details Play in preview player
+ * 
+ * @param  bar Id of bar to play.
+ */
 function bar_play(bar) {
 	song_stop();
 	debug("bar_play("+bar+")");
@@ -110,25 +116,34 @@ function bar_file(bar,player_id) {
 	player.load();
 }
 
+/**
+ * @brief Iterative play bar of song.
+ * @details Play bar of song and plan next bar.
+ * 
+ * @param bar_i Index of bar song.
+ */
 function song_play(bar_i) {
-	if(bar_i == 0) {
+	if(bar_i == 0) { // End of song
 		song_stop();
 		$('#song_stop').prop('disabled', false);
 		$('#song_play').prop('disabled', true);
 	}
 	var bar = document.getElementById("player"+bar_i);
-	if(bar == undefined) {
+	if(bar == undefined) { // ERROR
 		$('#song_stop').prop('disabled', true);
 		$('#song_play').prop('disabled', false);
 		return;
 	}
+	// Next bar
 	var nid = bar_i + 1;
 	bar.play();
+	// Remember timming handler
 	playing[bar_i] = setTimeout(function() {song_play(nid)},1800);
 	$('.playing').removeClass('playing');
 	debug(".bar"+bar_i+" .song");
 	$(".bar"+bar_i+".song").addClass('playing');
 }
+
 
 function song_stop() {
 	debug("song_stop()");
@@ -159,8 +174,15 @@ function song_preview() {
 	html_song.val(song.join(","));
 }
 
+/**
+ * @brief Dice toss
+ * @details 
+ * 
+ * @param  top Top border of the interval
+ * @return Random generated number.
+ */
 function dice_toss(top) {
-	// Generate number in the interval <0;top)
+	// Generate number in the interval <1;top>
 	return Math.floor(Math.random() * top);
 }
 
@@ -180,6 +202,13 @@ function get_html_bars(id) {
 	return html_bars;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ * 
+ * @param  [description]
+ * @return [description]
+ */
 function get_bars(id) {
 	debug("get_bars("+id+")");
 	var_exist(minuet);
