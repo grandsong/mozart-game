@@ -88,6 +88,7 @@ function bar_change(id) {
 }
 
 function type_switch() {
+	song_stop();
 	var type_name = $("#type .active").html();
 	debug("type_name: "+type_name+" old type: "+type);
 	var div_minuets = html_get("minuets");
