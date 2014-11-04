@@ -10,3 +10,15 @@
 .playing {
 	background-color: pink;		
 }
+
+#game {
+	text-align: center;	
+}
+
+#game table{
+	margin: 0 auto;
+}
+
+button:disabled {
+	color: gray;
+}

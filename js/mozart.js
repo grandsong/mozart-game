@@ -9,6 +9,8 @@ var ext = ".mp3"
 // *** Global variables ***
 var song = new Array();
 var playing = new Array();
+var type = 'M'; // Type value M - minuet, T - trio
+var loaded = new Array(BARS_COUNT);
 
 // minuet[row][col]
 var minuet = [
@@ -83,6 +85,31 @@ function debug(text) {
  */ 
 function bar_change(id) {
 	var_exist(id);
+}
+
+function type_switch() {
+	var type_name = $("#type .active").html();
+	debug("type_name: "+type_name+" old type: "+type);
+	var div_minuets = html_get("minuets");
+	var div_trios = html_get("trios");
+	switch(type_name){
+		case "Minuet":
+			type = "M";
+			// Hide trio, show minuet
+			div_trios.hide();
+			div_minuets.show();
+			break;
+		case "Trio":
+			type = "T";
+			div_minuets.hide();
+			div_trios.show();
+			break;
+		default:
+			
+			break;
+	}
+	debug("Type switched to: "+type);
+	song_generate();
 }
 
 // Play bar - preview play
@@ -228,10 +255,10 @@ function get_bars(id) {
 	return bars;
 }
 
-function song_generate(id) {
-	debug("song_generate("+id+")");
+function song_generate() {
+	debug("song_generate("+type+")");
 
-	bars = get_bars(id);
+	bars = get_bars(type);
 
 	var_exist(bars);
 	var_exist(song);
@@ -246,13 +273,14 @@ function song_generate(id) {
 	for(col = 0; col < cols; col++) {
 		row = dice_toss(rows);
 		bar = bars[row][col];
-		song.push(id+bar);
-		html_get(id+bar).addClass('song');
-		bar_file(id+bar,col);
+		song.push(type+bar);
+		html_get(type+bar).addClass('song');
+		bar_file(type+bar,col);
 	}
 	debug(song);
 	song_preview();
 	$('#song_play').prop('disabled', false);
+	preload();
 }
 
 function bars_init(id) {
@@ -283,14 +311,53 @@ function player_init(){
 	for(var i = 0; i< BARS_COUNT; i++) {
 		debug("player_init("+i+")");
 		// controls
-		player.append('<audio id="player'+i+'"></audio>');
+		player.append('<audio id="player'+i+'"	></audio>');
 	}
+}
+
+function preload() {
+	debug("Preload");
+
+	html_get("song_play").html("Loading...");
+
+	loaded = new Array(BARS_COUNT);
+	debug("preload: "+loaded);
+
+	for (var i = 0; i< BARS_COUNT; i++) {
+		debug("player "+i+" handled!");
+		html_get("player"+i).on("loadeddata",function(e){
+		//document.getElementById("player"+i).addEventListener("loadeddata", function() {
+			onloaded(e);
+			//html_get("player"+i).show();
+		});
+	}
+}
+
+function onloaded(e) {
+	//console.log(e);
+	var id = e.target.id;
+	var i = e.target.id.substr(6);
+	debug("player "+i+" ("+id+") loaded!");
+	loaded[i] = true;
+	is_loaded();
+}
+
+function is_loaded() {
+	for (var i = 0; i< BARS_COUNT; i++) {
+		if(!loaded[i]) {
+			debug("check player "+i+" not loaded!")
+			return false;
+		}
+	}
+	html_get("song_play").html("Play song...");
+	//song_play();
 }
 
 // *** MAIN ***
 bars_init("M");
 bars_init("T");
 player_init();
+type_switch();
 
 $('.btn-toggle').click(function() {
     $(this).find('.btn').toggleClass('active');  
@@ -302,3 +369,7 @@ $('.btn-toggle').click(function() {
     $(this).find('.btn').toggleClass('btn-default');
 	}
 );
+
+$("#type").click(function(){
+	type_switch();
+});

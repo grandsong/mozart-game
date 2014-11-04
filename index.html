@@ -75,10 +75,22 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="btn-group btn-toggle"> 
+                    Generate song:<br>
+                    <div id="type" class="btn-group btn-toggle"> 
                         <button class="btn btn-default active">Minuet</button>
                         <button class="btn btn-primary">Trio</button>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <button id="song_play" onclick="song_play(0);" disabled="true">Play song</button> 
+                    <button id="song_stop" onclick="song_stop();" disabled="true">Stop song</button><br>
+                    <button onclick="song_generate();">Generate another song</button><br>
+                    Song: <input type="text" id="song" size="20" readonly="true"><br>
+                    <audio id="player">Your browser does not support the audio element.</audio>
+                    <div id="players">Your browser does not support JavaScript.</div>
+                    <!--<button id="preload" onclick="preload();">Preload</button><br>-->
                 </div>
             </div>
             <div class="row">
@@ -89,16 +101,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <audio id="player">Your browser does not support the audio element.</audio>
-                    <div id="players">Your browser does not support JavaScript.</div>
-                    <button id="song_play" onclick="song_play(0);" disabled="true">Play song</button> <button id="song_stop" onclick="song_stop();" disabled="true">Stop song</button><br>
-                    <button onclick="song_generate('M');">Generate minuet</button><br>
-                    <button onclick="song_generate('T');">Generate trio</button><br>
-                    Song: <input type="text" id="song" size="20" readonly="true"><br>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -107,7 +109,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>Loop</h2>
-                    <hr class="star-light">
+                    <!--<hr class="star-light">-->
                 </div>
             </div>
             
@@ -120,7 +122,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>Contact Me</h2>
-                    <hr class="star-primary">
+                    <!--<hr class="star-primary">-->
                 </div>
             </div>
         </div>
