@@ -162,6 +162,11 @@ function song_play(bar_i) {
 		$('#song_play').prop('disabled', false);
 		return;
 	}
+	if(bar_i == 8) {
+		if(document.getElementById("playOnly8") != undefined) {
+			return;
+		}
+	}
 	// Next bar
 	var nid = bar_i + 1;
 	bar.play();

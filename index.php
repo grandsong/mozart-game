@@ -64,6 +64,9 @@
                     <li class="page-scroll">
                         <a href="#about">About</a>
                     </li>
+                    <li class="page-scroll">
+                        <a href="#demo">Demo</a>
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -91,6 +94,7 @@
                     <audio id="player">Your browser does not support the audio element.</audio>
                     <div id="players">Your browser does not support JavaScript.</div>
                     <!--<button id="preload" onclick="preload();">Preload</button><br>-->
+										<?php if(isset($_GET['demo'])) { ?> <div id="playOnly8">Demo playing..</div> <?php } ?>
                 </div>
             </div>
             <div class="row">
@@ -110,6 +114,7 @@
                 <div class="col-lg-12 text-center">
                     <h2>Loop</h2>
                     <!--<hr class="star-light">-->
+										Is preparing...
                 </div>
             </div>
             
@@ -123,6 +128,34 @@
                 <div class="col-lg-12 text-center">
                     <h2>About</h2>
                     <!--<hr class="star-primary">-->
+<div style="text-align: left;">
+An interesting musical game, Musikalisches Würfelspiel (musical dice game) has often been attributed to Mozart.<br>
+<br>
+The basis of the musical dice game consists of 272 musical measures and a table of rules used to select specific measures given a certain dice roll.  The result is a randomly selected 16 bar minuet and 16 bar trio.<br>
+<br>
+The famous version of the dice game attributed to Mozart, was first published only after his death in 1793 by J.J. Hummel in Berlin-Amsterdam, and afterwards several times in different forms. While this challenging idea had been known and tried out by other composers before Mozart, it was Mozart's game which became famous and successful. Though neither the original manuscript of the "Musikalisches Würfelspiel" nor direct references to it by Mozart were ever found, his authorship was never really questioned by publishers or musicologists.<br>
+<br>
+A game with identical musical sections was described in the February 1787 issue of a publications called Journal des Luxus und der Moden (Journal of Luxury and Fashions!). W. A. Mozart may have been connected with or influenced by this publication.... the later dice game attributed to him contains a rule table which is identical to the minuet table in the publication.. <br>
+<br>
+All possible choices were given by Mozart in such a way that by any selection the resulting melody is a pretty minuet fulfilling the harmonic and compositional requirements of minuets of that time.<br><br>
+</div>
+<div align="right">[<a href="http://www.amaranthpublishing.com/MozartDiceGame.htm">http://www.amaranthpublishing.com/MozartDiceGame.htm</a>]</div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="success" id="demo">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Demo</h2>
+                    <!--<hr class="star-primary">-->
+										<video  width="100%" id="demo" controls onclick=" this.paused ? this.play() : this.pause();">
+											<source src="video.webm" type="video/webm">
+										</video>
                 </div>
             </div>
         </div>
