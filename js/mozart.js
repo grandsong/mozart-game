@@ -41,7 +41,7 @@ var trio = [
 /**
  * @brief Control if variable exists and if is not null
  * @details Helper function for debugging and integrity checking.
- * 
+ *
  * @param variable Content of variable
  * @throw ReferenceError
  */
@@ -54,7 +54,7 @@ function var_exist(variable) {
 
 /**
  * @brief Return jQuery object from html element with id
- * 
+ *
  * @param  id id for html element
  * @return jQuery object
  */
@@ -70,7 +70,7 @@ function html_get(id) {
 
 /**
  * @brief Function for print debug to javascript console.
- * 
+ *
  * @param  text Text for debugging
  */
 function debug(text) {
@@ -80,9 +80,9 @@ function debug(text) {
 
 /**
  * @brief Change bar of generated song
- * 
+ *
  * @param  id Id of current editated bar
- */ 
+ */
 function bar_change(id) {
 	var_exist(id);
 }
@@ -106,7 +106,7 @@ function type_switch() {
 			div_trios.show();
 			break;
 		default:
-			
+
 			break;
 	}
 	debug("Type switched to: "+type);
@@ -117,7 +117,7 @@ function type_switch() {
 /**
  * @brief Play bar - preview play
  * @details Play in preview player
- * 
+ *
  * @param  bar Id of bar to play.
  */
 function bar_play(bar) {
@@ -147,7 +147,7 @@ function bar_file(bar,player_id) {
 /**
  * @brief Iterative play bar of song.
  * @details Play bar of song and plan next bar.
- * 
+ *
  * @param bar_i Index of bar song.
  */
 function song_play(bar_i) {
@@ -209,8 +209,8 @@ function song_preview() {
 
 /**
  * @brief Dice toss
- * @details 
- * 
+ * @details
+ *
  * @param  top Top border of the interval
  * @return Random generated number.
  */
@@ -238,7 +238,7 @@ function get_html_bars(id) {
 /**
  * @brief [brief description]
  * @details [long description]
- * 
+ *
  * @param  [description]
  * @return [description]
  */
@@ -295,14 +295,14 @@ function bars_init(id) {
 	html_bars = get_html_bars(id);
 
 	var rows = bars.length;
-	
+
 	var html = '';
-	html += '<table border="1">'
+	html += '<table>'
 	for(r = 0; r < rows; r++) {
 		html += '<tr>';
 		for(c = 0; c < bars[r].length; c++) {
 			var bar = bars[r][c];
-			html += '<td><button class="bar bar'+c+'" id="'+id+bar+'" onclick="bar_play(\''+id+bar+'\')">'+bar+'</button></td>';
+			html += '<td><button class="btn bar bar'+c+' barrow'+r+'" id="'+id+bar+'" onclick="bar_play(\''+id+bar+'\')">'+bar+'</button></td>';
 		}
 		html += '</tr>';
 	}
@@ -366,7 +366,7 @@ player_init();
 type_switch();
 
 $('.btn-toggle').click(function() {
-    $(this).find('.btn').toggleClass('active');  
+    $(this).find('.btn').toggleClass('active');
 
     if ($(this).find('.btn-primary').size()>0) {
     	$(this).find('.btn').toggleClass('btn-primary');

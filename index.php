@@ -59,9 +59,9 @@
                     <li class="page-scroll">
                         <a href="#game">Game</a>
                     </li>
-                    <li class="page-scroll">
+                    <?php /*<li class="page-scroll">
                         <a href="#loop">Loop</a>
-                    </li>
+                    </li>*/?>
                     <li class="page-scroll">
                         <a href="#about">About</a>
                     </li>
@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     Generate song:<br>
-                    <div id="type" class="btn-group btn-toggle"> 
+                    <div id="type" class="btn-group btn-toggle">
                         <button class="btn btn-default active">Minuet</button>
                         <button class="btn btn-primary">Trio</button>
                     </div>
@@ -88,11 +88,20 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <button id="song_play" onclick="song_play(0);" disabled="true">Play song</button> 
-                    <button id="song_stop" onclick="song_stop();" disabled="true">Stop song</button><br>
-                    <button onclick="song_generate();">Generate another song</button><br>
-                    Song: <input type="text" id="song" size="20" readonly="true"><br>
-                    <audio id="player">Your browser does not support the audio element.</audio>
+                    <div class="btn-group" style="margin-top: 10px; margin-bottom: 10px;">
+                      <button class="btn btn-default" id="song_play" onclick="song_play(0);" disabled="true">Play song</button>
+                      <button class="btn btn-default" id="song_stop" onclick="song_stop();" disabled="true">Stop song</button>
+
+                      <button class="btn btn-default" onclick="song_generate();">Generate another song</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                    <div style="display: none;">Song: <input class="btn" type="text" id="song" size="20" readonly="true"><br></div>
+                    <div style="btn-group btn-group-xs">
+                      <audio id="player">Your browser does not support the audio element.</audio>
+                    </div>
                     <div id="players">Your browser does not support JavaScript.</div>
                     <!--<button id="preload" onclick="preload();">Preload</button><br>-->
 										<?php if(isset($_GET['demo'])) { ?> <div id="playOnly8">Demo playing..</div> <?php } ?>
@@ -109,7 +118,7 @@
         </div>
     </section>
 
-    <section class="success" id="loop">
+    <?php /*<section class="success" id="loop">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -118,12 +127,12 @@
 										Is preparing...
                 </div>
             </div>
-            
+
         </div>
-    </section>
+    </section>*/?>
 
     <!-- Contact Section -->
-    <section id="about">
+    <section id="about" class="success">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -148,7 +157,7 @@ All possible choices were given by Mozart in such a way that by any selection th
     </section>
 
     <!-- Contact Section -->
-    <section class="success" id="demo">
+    <section id="demo">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -169,18 +178,21 @@ All possible choices were given by Mozart in such a way that by any selection th
                 <div class="row">
                     <div class="footer-col col-md-4">
                         <h3>Author</h3>
-                        <p>Martin Vicián</p>
+                        <p><a href="http://www.vician.cz/">Martin Vicián</a></p>
                     </div>
                     <div class="footer-col col-md-4">
                         <h3>Project</h3>
                         <p>
+                          <a href="https://is.muni.cz/predmet/fi/podzim2014/PV121">PV121 Computer Music I</a><br />
+                          <a href="http://www.fi.muni.cz/~qruzicka">MgA. Rudolf Růžička</a>
                         </p>
                     </div>
                     <div class="footer-col col-md-4">
                         <h3>Sources</h3>
                         <p>
-                            <a href="">First</a><br>
-                            <a href="">second</a>
+                            <a href="http://www.amaranthpublishing.com/MozartDiceGame.htm">amaranthpublishing.com</a><br />
+                            <a href="http://www.sciencenews.org/articles/20010901/mathtrek.asp">sciencenews.org</a><br />
+                            <a href="http://www.chr-reuter.de/wuerfel/geschichte.htm">chr-reuter.de</a>
                         </p>
                     </div>
                 </div>
@@ -190,7 +202,7 @@ All possible choices were given by Mozart in such a way that by any selection th
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        Copyright &copy; Martin Vicián 2014
+                        Copyright &copy; <a href="http://www.vician.cz/">Martin Vicián</a> 2014 - <?php echo date("Y"); ?>
                     </div>
                 </div>
             </div>

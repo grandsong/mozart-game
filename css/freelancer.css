@@ -25,6 +25,10 @@ a.active {
     color: #18bc9c;
 }
 
+section.success a{
+  color: #2c3e50;
+}
+
 h1,
 h2,
 h3,
