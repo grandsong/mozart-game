@@ -21,8 +21,8 @@
 
     <!-- Custom Fonts -->
     <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -178,7 +178,7 @@ All possible choices were given by Mozart in such a way that by any selection th
                 <div class="row">
                     <div class="footer-col col-md-4">
                         <h3>Author</h3>
-                        <p><a href="http://www.vician.cz/">Martin Vicián</a></p>
+                        <p><a href="https://www.vician.cz/">Martin Vicián</a></p>
                     </div>
                     <div class="footer-col col-md-4">
                         <h3>Project</h3>
@@ -202,7 +202,7 @@ All possible choices were given by Mozart in such a way that by any selection th
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        Copyright &copy; <a href="http://www.vician.cz/">Martin Vicián</a> 2014 - <?php echo date("Y"); ?>
+                        Copyright &copy; <a href="https://www.vician.cz/">Martin Vicián</a> 2014 - <?php echo date("Y"); ?>
                     </div>
                 </div>
             </div>
@@ -225,7 +225,7 @@ All possible choices were given by Mozart in such a way that by any selection th
     <script src="js/mozart.js"></script>
 
     <!-- Plugin JavaScript -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     <script src="js/classie.js"></script>
     <!--<script src="js/cbpAnimatedHeader.js"></script>-->
 
